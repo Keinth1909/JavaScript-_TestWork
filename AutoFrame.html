@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+.frame{
+   
+    position: relative;
+    width: 780px;
+    height: 380px;
+    margin: 100px auto 0;
+    user-select: none;
+}
+
+.frame .btn {
+        position: absolute;
+        top: 50%;
+        z-index: 1;
+        width: 50px;
+        height: 80px;
+        margin-top: -40px;
+        background-color: rgba(0, 0, 0, .5);
+        color: #fff;
+        text-align: center;
+        line-height: 80px;
+        cursor: pointer;
+    }
+    .frame .left {
+        left: 0;
+    }
+
+    .frame .right {
+        right: 0;
+    }
+    .img{
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        height: 330px;
+        cursor: pointer;
+    }
+    .img-list {
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 500%;
+        height: 100%;
+        transition: left .5s;
+    }
+    .img-list li{
+        
+        float: left;
+        width: 780px;
+        height: 330px;
+    }
+  
+    .img-list li:nth-of-type(1) {
+        background: url("images/01.jpg") no-repeat center/cover;
+    }
+
+    .img-list li:nth-of-type(2) {
+        background: url("images/02.jpg") no-repeat center/cover;
+    }
+
+    .img-list li:nth-of-type(3) {
+        background: url("images/03.jpg") no-repeat center/cover;
+    }
+
+    .img-list li:nth-of-type(4) {
+        background: url("images/04.jpg") no-repeat center/cover;
+    }
+
+    .img-list li:nth-of-type(5) {
+        background: url("images/05.jpg") no-repeat center/cover;
+    }
+    
+    .tab-list{
+        position: absolute;
+        overflow: hidden;
+        width: 100%;
+       
+    }
+    .tab-list:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+    .tab-list li{
+        float: left;
+        width: 20%;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        background-color: #000;
+        font-size: 12px;
+        color: #eee;
+        cursor: pointer;
+        transition: 1s;
+
+    }
+    .tab-list li:hover {
+        cursor: pointer;
+    }
+    .tab-list>.on {
+        background-color: #303030;
+        color: #e9c06c;
+    }
+    
+
+</style>
+<body>
+    <div class="frame">
+        <div class="btn left">&lt;</div>
+        <div class="btn right">&gt;</div>
+        <div class="img">
+        <ul class="img-list">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        </div>
+        <ul class="tab-list">
+            <li class="on">一</li>
+            <li>二</li>
+            <li>三</li>
+            <li>四</li>
+            <li>五</li>
+        </ul>
+    </div>
+    <script>
+        (function (){
+
+        
+    // 获取元素 
+    var aTabLi =document.querySelectorAll(".tab-list li");  //获取滚动按钮
+    var oImgList = document.querySelector(".img .img-list");  //获取图片
+    var aImgLi = document.querySelectorAll(".img-list li")
+    var oFrame = document.querySelector(".frame"); //获取整个盒子  对盒子里可以进行移入移出事件 
+    // console.log(oImgList)
+    var len =aTabLi.length;
+    var num = 0; //设置一个信号量
+    //批量绑定事件
+    for(var i =0; i<len; i++){
+        aTabLi[i].index =i ;
+        aTabLi[i].onclick =function(){
+            if(num == this.index ) return //如果信号量等于 下标泽返回 
+            // console.log(this.index)
+            aTabLi[num].classList.remove("on");  //移出 on 元素 
+            num = this.index;  //num 赋值当前的值
+            aTabLi[num].classList.add("on");   //增加 on 元素
+            oImgList.style.left ="-" + num*100+"%" ;
+            console.log(oImgList.style.left)
+        }
+    }
+
+    // 自动轮播
+   function fn(){
+        aTabLi[num].classList.remove("on");
+        num++;
+        // if(num >= len) num =0
+        num  %=len; //取模  当 信号量 等于长度 返回初始位置   
+        aTabLi[num].classList.add("on");
+        oImgList.style.left = "-" +num *100 +"%";
+
+    }
+    
+
+      // 开启定时器  鼠标移入移出事件
+     
+    timer = setInterval(fn, 2000);
+        oFrame.onmouseenter = function () {
+            console.log(1)
+            clearInterval(timer);
+        };
+        oFrame.onmouseleave = function () {
+                        console.log(2)
+            timer = setInterval(fn, 2000)
+        };
+        })();
+
+    </script>    
+</body>
+</html>
